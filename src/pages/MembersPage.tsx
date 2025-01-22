@@ -4,14 +4,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
 
-const memberData = {
+interface MemberData {
+    name: string;
+    contact: string;
+    rank: string;
+    wallet: string;
+}
+
+interface ActionButton {
+    label: string;
+    action: string;
+}
+
+interface FamilyMember {
+    name: string;
+    dateOfBirth: string;
+    type: string;
+    image: string;
+    alt: string;
+}
+
+const memberData: MemberData = {
     name: "Prakash Singh Rana",
     contact: "9711009451",
     rank: "AxRt35$$1",
     wallet: "7000",
 };
 
-const actionButtons = [
+const actionButtons: ActionButton[] = [
     { label: "Transactions", action: "handleTransactions" },
     { label: "Recharge", action: "handleRecharge" },
     { label: "Notifications", action: "handleNotificatio" },
@@ -19,7 +39,7 @@ const actionButtons = [
     { label: "Book DSOI", action: "handleBooking" },
 ];
 
-const familyMembers = [
+const familyMembers: FamilyMember[] = [
     {
         name: "Mehul",
         dateOfBirth: "20-06-2003",
@@ -43,14 +63,23 @@ const familyMembers = [
     },
 ];
 
-const MemberInfoField = ({ label, value }) => (
+interface MemberInfoFieldProps {
+    label: string;
+    value: string;
+}
+
+const MemberInfoField: React.FC<MemberInfoFieldProps> = ({ label, value }) => (
     <div className="flex flex-col text-left w-[200px]">
         <Label>{label}</Label>
         <Input defaultValue={value} readOnly />
     </div>
 );
 
-const FamilyMemberCard = ({ member }) => (
+interface FamilyMemberCardProps {
+    member: FamilyMember;
+}
+
+const FamilyMemberCard: React.FC<FamilyMemberCardProps> = ({ member }) => (
     <Card>
         <CardContent className="flex w-[fit-content]">
             <img
@@ -67,7 +96,7 @@ const FamilyMemberCard = ({ member }) => (
     </Card>
 );
 
-function MembersPage() {
+const MembersPage: React.FC = () => {
     return (
         <div>
             <div className="flex flex-col lg:flex-row justify-between mb-2">
@@ -90,8 +119,8 @@ function MembersPage() {
 
                 <div className="flex flex-col space-y-6 w-full lg:w-[297px] mt-8 lg:mt-0">
                     {actionButtons.map((action) => (
-                        <div onClick={action.action}>
-                            <Button key={action}>
+                        <div key={action.label} onClick={() => console.log(action.action)}>
+                            <Button>
                                 {action.label}
                             </Button>
                         </div>
@@ -107,4 +136,4 @@ function MembersPage() {
     );
 }
 
-export default MembersPage
+export default MembersPage;

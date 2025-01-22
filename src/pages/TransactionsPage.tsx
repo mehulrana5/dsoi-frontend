@@ -1,13 +1,13 @@
-import React from 'react'
+import { FC } from 'react';
 
-function TransactionsPage() {
+const TransactionsPage: FC = () => {
     return (
         <div>
             <h1>
                 Transactions Page
             </h1>
         </div>
-    )
+    );
 }
 
-export default TransactionsPage
+export default TransactionsPage;
