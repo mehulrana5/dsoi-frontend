@@ -44,21 +44,21 @@ const familyMembers: FamilyMember[] = [
         name: "Mehul",
         dateOfBirth: "20-06-2003",
         type: "Dependent",
-        image: "./src/assets/mehul.png",
+        image: "src/assets/mehul.PNG",
         alt: "Mehul",
     },
     {
         name: "Mitul",
         dateOfBirth: "18-01-2005",
         type: "Dependent",
-        image: "./src/assets/mitul.png",
+        image: "src/assets/mitul.PNG",
         alt: "Mitul",
     },
     {
         name: "Hema Rana",
         dateOfBirth: "31-07-1980",
         type: "Spouse",
-        image: "./src/assets/hema.png",
+        image: "src/assets/hema.PNG",
         alt: "Hema",
     },
 ];
@@ -102,7 +102,7 @@ const MembersPage: React.FC = () => {
             <div className="flex flex-col lg:flex-row justify-between mb-2">
                 <div className="flex flex-col lg:flex-row gap-1">
                     <img
-                        src="src/assets/prakash.png"
+                        src="src/assets/prakash.PNG"
                         alt="Member"
                         className="w-full lg:w-[200px] h-[200px] object-cover"
                     />
