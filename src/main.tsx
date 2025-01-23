@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename="/dsoi-frontend">
       <StrictMode>
         <Routes>
-          <Route path='/' element={<LoginForm />} />
+          <Route path='/dsoi-frontend' element={<LoginForm />} />
           <Route path='/member' element={<MembersPage />} />
         </Routes>
       </StrictMode>
