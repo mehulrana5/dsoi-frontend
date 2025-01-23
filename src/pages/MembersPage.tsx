@@ -45,56 +45,92 @@ const familyMembers = [
     },
 ];
 
+interface Member {
+    name: string;
+    dateOfBirth: string;
+    type: string;
+    image: string;
+    alt: string;
+}
+
+const MemberCard = ({ member }: { member: Member }) => (
+    <Card style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '.5em',
+    }}>
+        <Avatar style={{
+            width: '200px',
+            height: '200px',
+        }}>
+            <AvatarImage src={member.image} alt="User Image" style={{ objectFit: 'cover' }} />
+            <AvatarFallback>{member.alt}</AvatarFallback>
+        </Avatar>
+        <div style={{
+            width: '200px',
+            margin:"0 0 0 20px"
+        }}>
+            <Label>Name</Label>
+            <Input value={member.name} readOnly />
+            <Label>Date of Birth</Label>
+            <Input value={member.dateOfBirth} readOnly />
+            <Label>Type</Label>
+            <Input value={member.type} readOnly />
+        </div>
+    </Card>
+);
+
 const MembersPage = () => {
     return (
-        <div>
-            <div>
-                <Card className="flex flex-wrap items-center justify-around">
-                    <div className="flex flex-wrap items-center justify-center p-4 m-2">
-                        <Avatar className="w-60 h-60 mr-6">
-                            <AvatarImage src={memberData.image} alt="User Image" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                            <AvatarFallback>{memberData.alt}</AvatarFallback>
-                        </Avatar>
-                        <div className="">
-                            <Label>Name</Label>
-                            <Input value={memberData.name} readOnly />
-                            <Label>Contact</Label>
-                            <Input value={memberData.contact} readOnly />
-                            <Label>Rank</Label>
-                            <Input value={memberData.rank} readOnly />
-                            <Label>Wallet</Label>
-                            <Input value={memberData.wallet} readOnly />
-                        </div>
+        <div style={{
+            display: 'flex',
+            flexWrap: "wrap",
+            padding:"1em",
+            width: "95VW",
+            justifyContent:"space-between"
+        }}>
+            <Card style={{
+                display: 'flex',
+                flexDirection: "column",
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                // padding: '1rem',
+                width: "400px"
+            }}>
+                <div className="flex flex-wrap items-center justify-center m-2 w-full md:w-auto">
+                    <Avatar className="w-60 h-60 md:w-40 md:h-40 mr-6">
+                        <AvatarImage src={memberData.image} alt="User Image" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                        <AvatarFallback>{memberData.alt}</AvatarFallback>
+                    </Avatar>
+                    <div className="md:w-auto">
+                        <Label>Name</Label>
+                        <Input value={memberData.name} readOnly />
+                        <Label>Contact</Label>
+                        <Input value={memberData.contact} readOnly />
+                        <Label>Rank</Label>
+                        <Input value={memberData.rank} readOnly />
+                        <Label>Wallet</Label>
+                        <Input value={memberData.wallet} readOnly />
                     </div>
-                    <div style={{
-                        display: 'flex',
-                        width: "350px",
-                        flexWrap: 'wrap',
-                    }}>
-                        {actionButtons.map((button, index) => (
-                            <Button className="m-3 w-[fit-content]" key={index} onClick={() => console.log(button.action)}>
-                                {button.label}
-                            </Button>
-                        ))}
-                    </div>
-                </Card>
-            </div>
-            <div className="flex flex-wrap">
+                </div>
+                <div className="flex flex-wrap justify-center w-full md:w-auto">
+                    {actionButtons.map((button, index) => (
+                        <Button className="m-3 w-full md:w-auto" key={index} onClick={() => console.log(button.action)}>
+                            {button.label}
+                        </Button>
+                    ))}
+                </div>
+            </Card>
+            <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                width: "900px",
+            }}>
                 {familyMembers.map((member, index) => (
-                    <Card className="flex flex-wrap items-center justify-center p-4 m-2" key={index}>
-                        <Avatar className="w-60 h-60 mr-6">
-                            <AvatarImage src={member.image} alt="User Image" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                            <AvatarFallback>AB</AvatarFallback>
-                        </Avatar>
-                        <div className="">
-                            <Label>Name</Label>
-                            <Input value={member.name} readOnly />
-                            <Label>Date of Birth</Label>
-                            <Input value={member.dateOfBirth} readOnly />
-                            <Label>Type</Label>
-                            <Input value={member.type} readOnly />
-                        </div>
-                    </Card>
+                    <MemberCard member={member} key={index} />
                 ))}
             </div>
         </div>
