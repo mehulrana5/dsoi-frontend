@@ -9,11 +9,22 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useState } from "react"
+import { useNavigate } from 'react-router';
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [cred, setCred] = useState({ username: "", password: "" })
+  const navigate = useNavigate();
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault()
+    console.log("Login details:", cred)
+    navigate('/member')
+    // Add your login logic here
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -24,23 +35,31 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <div className="flex">
-                  <Label htmlFor="email">User name</Label>
+                  <Label htmlFor="username">User name</Label>
                 </div>
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
                   required
+                  value={cred.username}
+                  onChange={(e) => setCred({ ...cred, username: e.target.value })}
                 />
               </div>
               <div className="grid gap-2">
                 <div className="flex">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={cred.password}
+                  onChange={(e) => setCred({ ...cred, password: e.target.value })}
+                />
                 <a
                   href="#"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
