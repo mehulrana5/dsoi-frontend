@@ -9,20 +9,20 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
-import { useNavigate } from 'react-router';
+import { useContext, useState } from "react"
+import { UserContext } from "@/context/UserContextProvider"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const context = useContext(UserContext);
+
   const [cred, setCred] = useState({ username: "", password: "" })
-  const navigate = useNavigate();
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
-    console.log("Login details:", cred)
-    navigate('/member')
-    // Add your login logic here
+    context?.login(cred);
   }
 
   return (
