@@ -1,16 +1,10 @@
 import { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Define the User interface
-interface User {
-    id: string;
-    username: string;
-    token: string;
-}
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Define the context type
 interface UserContextType {
-    user: User | null;
+    loading: string;
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
 }
@@ -25,30 +19,35 @@ interface UserContextProviderProps {
 
 // UserContextProvider component
 const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
-
-    const [user, setUser] = useState<User | null>({
-        id: localStorage.getItem("id") || "",
-        username: localStorage.getItem("userName") || "",
-        token: localStorage.getItem("token") || ""
-    });
-
+    const [loading, setLoading] = useState<string>("");
     const navigate = useNavigate();
 
     const login = async (credentials: { username: string; password: string }) => {
+        setLoading("login");
         try {
-            console.log('Attempting login with:', credentials);
-            localStorage.setItem("id", "1");
-            localStorage.setItem("userName", "1");
-            localStorage.setItem("token", "1");
+            const res = await fetch(`${BASE_URL}/member/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userName: credentials.username, password: credentials.password })
+            });
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return;
+            }
+            localStorage.setItem("id", data.member.id);
+            localStorage.setItem("userName", data.member.userName);
+            localStorage.setItem("token", data.token);
             navigate('/member');
         } catch (error) {
             console.error('Login error:', error);
             alert('Login failed. Please try again.');
+        } finally {
+            setLoading("");
         }
     };
 
     const logout = () => {
-        setUser(null);
         localStorage.removeItem("id");
         localStorage.removeItem("userName");
         localStorage.removeItem("token");
@@ -56,7 +55,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ loading, login, logout }}>
             {children}
         </UserContext.Provider>
     );

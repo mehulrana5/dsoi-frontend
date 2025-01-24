@@ -17,6 +17,7 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const context = useContext(UserContext);
+  const { loading } = context || {};
 
   const [cred, setCred] = useState({ username: "", password: "" })
 
@@ -67,8 +68,8 @@ export function LoginForm({
                   Forgot your password?
                 </a>
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full" disabled={loading === "login"}>
+                {loading ? 'Loading...' : 'Login'}
               </Button>
             </div>
           </form>
