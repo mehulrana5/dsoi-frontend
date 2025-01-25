@@ -44,9 +44,9 @@ const tData = [
 function TransactionsPage() {
     const [data, setData] = useState<Transaction[]>([]);
 
-    const rowsPerPage = 5
-    const [startIndex, setStartIndex] = useState(0);
-    const [endIndex, setEndIndex] = useState(rowsPerPage);
+    // const rowsPerPage = 5
+    // const [startIndex, setStartIndex] = useState(0);
+    // const [endIndex, setEndIndex] = useState(rowsPerPage);
 
     useEffect(() => {
         setData(tData)
