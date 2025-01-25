@@ -8,6 +8,7 @@ interface UserContextType {
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
     minPayment: (id: { id: string }) => Promise<number>;
+    addAmount: (amount: { amount: number }) => void;
 }
 
 // Create the UserContext
@@ -78,12 +79,37 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             alert('Payment failed. Please try again.');
             return 0; // Return a default value in case of error
         } finally {
-            setLoading("");
+            setTimeout(() => {
+                setLoading("");
+            }, 1000);
         }
     };
 
+    const addAmount = async (amount: { amount: number }) => {
+        setLoading("addAmount");
+        try {
+            // const res = await fetch(`${BASE_URL}/members`, {
+            //     method: 'PUT',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ wallet: amount })
+            // });
+            // const data = await res.json();
+            // if (data.error) {
+            //     alert(data.error.message);
+            //     return;
+            // }
+            console.log(amount);
+        } catch (error) {
+            console.error('Add amount error:', error);
+            alert('Adding amount failed. Please try again.');
+        } finally {
+            setTimeout(() => {
+                setLoading("");
+            }, 1000);
+        }
+    };
     return (
-        <UserContext.Provider value={{ loading, login, logout, minPayment }}>
+        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount }}>
             {children}
         </UserContext.Provider>
     );

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -20,13 +21,25 @@ const formSchema = z.object({
     name_7230181643: z.coerce.number(),
 });
 
-function MyForm({ minPay }: { minPay: number }) {
+function RechargePage() {
+    const context = useContext(UserContext)
+
+    const [minPay, setMinPay] = useState(0);
+
+    useEffect(() => {
+        context?.minPayment({ id: "haieyst1212" }).then((res) => {
+            setMinPay(res)
+            console.log(res);
+        })
+    }, [])
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            console.log(values);
+            context?.addAmount({ amount: values.name_7230181643 })
             toast(
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                     <h3>{`Added ${values.name_7230181643} to you wallet`}</h3>
@@ -37,44 +50,6 @@ function MyForm({ minPay }: { minPay: number }) {
             toast.error("Failed to submit the form. Please try again.");
         }
     }
-
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-                <FormField
-                    control={form.control}
-                    name="name_7230181643"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Amount (min:{minPay})</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="Enter amount"
-                                    type="number"
-                                    min={minPay}
-                                    {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Submit</Button>
-            </form>
-        </Form>
-    )
-}
-
-function RechargePage() {
-    const context = useContext(UserContext)
-
-    const [minPay, setMinPay] = useState(0);
-
-    useEffect(() => {
-        context?.minPayment({id:"haieyst1212"}).then((res)=>{
-            setMinPay(res)
-            console.log(res);
-        })
-    }, [])
 
     return (
         <div style={{
@@ -88,7 +63,31 @@ function RechargePage() {
             margin: "auto"
         }}>
             Recharge Page
-            <MyForm minPay={minPay} />
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+                    <FormField
+                        control={form.control}
+                        name="name_7230181643"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Amount (min:{minPay})</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Enter amount"
+                                        type="number"
+                                        min={minPay}
+                                        {...field} />
+                                </FormControl>
+                                <FormDescription>You need to add the minimum amount</FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit" disabled={context?.loading === 'addAmount'}>{
+                        context?.loading === 'addAmount' ? `Loading...` : 'Submit'
+                    }</Button>
+                </form>
+            </Form>
         </div>
     )
 }
