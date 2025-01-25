@@ -25,19 +25,19 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const login = async (credentials: { username: string; password: string }) => {
         setLoading("login");
         try {
-            const res = await fetch(`${BASE_URL}/member/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userName: credentials.username, password: credentials.password })
-            });
-            const data = await res.json();
-            if (data.error) {
-                alert(data.error.message);
-                return;
-            }
-            localStorage.setItem("id", data.member.id);
-            localStorage.setItem("userName", data.member.userName);
-            localStorage.setItem("token", data.token);
+            // const res = await fetch(`${BASE_URL}/member/login`, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ userName: credentials.username, password: credentials.password })
+            // });
+            // const data = await res.json();
+            // if (data.error) {
+            //     alert(data.error.message);
+            //     return;
+            // }
+            // localStorage.setItem("id", data.member.id);
+            // localStorage.setItem("userName", data.member.userName);
+            // localStorage.setItem("token", data.token);
             navigate('/member');
         } catch (error) {
             console.error('Login error:', error);

@@ -13,14 +13,6 @@ const memberData = {
     alt: 'Prakash Singh Rana'
 };
 
-const actionButtons = [
-    { label: "Transactions", action: "handleTransactions" },
-    { label: "Recharge", action: "handleRecharge" },
-    { label: "Notifications", action: "handleNotificatio" },
-    { label: "Add Guest", action: "handleAddGuest" },
-    { label: "Book DSOI", action: "handleBooking" },
-];
-
 const familyMembers = [
     {
         name: "Mehul",
@@ -60,6 +52,7 @@ const MemberCard = ({ member }: { member: Member }) => (
         alignItems: 'center',
         justifyContent: 'center',
         padding: '.5em',
+        minWidth:"300px"
     }}>
         <Avatar style={{
             width: '200px',
@@ -69,8 +62,7 @@ const MemberCard = ({ member }: { member: Member }) => (
             <AvatarFallback>{member.alt}</AvatarFallback>
         </Avatar>
         <div style={{
-            width: '200px',
-            margin:"0 0 0 20px"
+            margin: "0 0 0 20px"
         }}>
             <Label>Name</Label>
             <Input value={member.name} readOnly />
@@ -87,9 +79,7 @@ const MembersPage = () => {
         <div style={{
             display: 'flex',
             flexWrap: "wrap",
-            padding:"1em",
-            width: "95VW",
-            justifyContent:"space-between"
+            padding: ".5em",
         }}>
             <Card style={{
                 display: 'flex',
@@ -97,15 +87,18 @@ const MembersPage = () => {
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 justifyContent: 'space-around',
-                // padding: '1rem',
-                width: "400px"
+                width: "30%",
+                minWidth:"300px"
             }}>
-                <div className="flex flex-wrap items-center justify-center m-2 w-full md:w-auto">
-                    <Avatar className="w-60 h-60 md:w-40 md:h-40 mr-6">
+                <div>
+                    <Avatar style={{
+                        width:"200px",
+                        height:"200px"
+                    }}>
                         <AvatarImage src={memberData.image} alt="User Image" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                         <AvatarFallback>{memberData.alt}</AvatarFallback>
                     </Avatar>
-                    <div className="md:w-auto">
+                    <div>
                         <Label>Name</Label>
                         <Input value={memberData.name} readOnly />
                         <Label>Contact</Label>
@@ -116,18 +109,11 @@ const MembersPage = () => {
                         <Input value={memberData.wallet} readOnly />
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-center w-full md:w-auto">
-                    {actionButtons.map((button, index) => (
-                        <Button className="m-3 w-full md:w-auto" key={index} onClick={() => console.log(button.action)}>
-                            {button.label}
-                        </Button>
-                    ))}
-                </div>
             </Card>
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                width: "900px",
+                width: "70%",
             }}>
                 {familyMembers.map((member, index) => (
                     <MemberCard member={member} key={index} />
