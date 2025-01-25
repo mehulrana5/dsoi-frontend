@@ -7,6 +7,7 @@ interface UserContextType {
     loading: string;
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
+    minPayment: (id: { id: string }) => Promise<number>;
 }
 
 // Create the UserContext
@@ -24,7 +25,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
 
     const login = async (credentials: { username: string; password: string }) => {
         setLoading("login");
-        
+
         console.log(credentials, BASE_URL);
 
         try {
@@ -57,8 +58,32 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         navigate('/');
     };
 
+    const minPayment = async (id: { id: string }) => {
+        setLoading("minPayment");
+        try {
+            // const res = await fetch(`${BASE_URL}/payment/min`, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(id)
+            // });
+            // const data = await res.json();
+            // if (data.error) {
+            //     alert(data.error.message);
+            //     return 0;
+            // }
+            console.log(id);
+            return 980; // Replace this with the actual value from the response
+        } catch (error) {
+            console.error('Payment error:', error);
+            alert('Payment failed. Please try again.');
+            return 0; // Return a default value in case of error
+        } finally {
+            setLoading("");
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ loading, login, logout }}>
+        <UserContext.Provider value={{ loading, login, logout, minPayment }}>
             {children}
         </UserContext.Provider>
     );

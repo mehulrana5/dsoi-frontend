@@ -14,44 +14,61 @@ import {
 } from "@/components/ui/sidebar"
 import { ModeToggle } from "./mode-toggle"
 import { Link } from "react-router-dom"
-
-const data = {
-  navMain: [
-    {
-      title: "Operations",
-      url: "/",
-      items: [
-        {
-          title: "Profile",
-          url: "/member",
-          isActive: true
-        },
-        {
-          title: "Recharge",
-          url: "/recharge",
-        },
-        {
-          title: "Transactions",
-          url: "/transactions",
-        },
-        {
-          title: "Notifications",
-          url: "/notifications",
-        },
-        {
-          title: "Add Guests",
-          url: "/addGuests",
-        },
-        {
-          title: "Book DSOI",
-          url: "/book",
-        },
-      ],
-    }
-  ],
-}
+import { useState } from "react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const [data, setData] = useState({
+    navMain: [
+      {
+        title: "Operations",
+        url: "/",
+        items: [
+          {
+            title: "Profile",
+            url: "/member",
+            isActive: false
+          },
+          {
+            title: "Recharge",
+            url: "/recharge",
+            isActive: false
+          },
+          {
+            title: "Transactions",
+            url: "/transactions",
+            isActive: false
+          },
+          {
+            title: "Notifications",
+            url: "/notifications",
+            isActive: false
+          },
+          {
+            title: "Add Guests",
+            url: "/addGuests",
+            isActive: false
+          },
+          {
+            title: "Book DSOI",
+            url: "/book",
+            isActive: false
+          },
+        ],
+      }
+    ],
+  });
+
+  function handleClick(idx: number) {
+    setData(prevData => {
+      const newData = { ...prevData };
+      newData.navMain[0].items.forEach(e => {
+        e.isActive = false;
+      });
+      newData.navMain[0].items[idx].isActive = true;
+      return newData;
+    });
+  }
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -63,10 +80,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
+                {item.items.map((item, idx) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      <Link to={item.url}>{item.title}</Link>
+                      <Link to={item.url} onClick={() => handleClick(idx)}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

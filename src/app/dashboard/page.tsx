@@ -4,6 +4,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 import { Outlet } from "react-router-dom"
 
 export default function Page() {
@@ -12,10 +13,11 @@ export default function Page() {
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
+          <SidebarTrigger />
         </header>
         <div>
           <Outlet />
+          <Toaster />
         </div>
       </SidebarInset>
     </SidebarProvider>

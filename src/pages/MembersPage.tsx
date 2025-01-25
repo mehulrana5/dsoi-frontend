@@ -78,7 +78,11 @@ const MembersPage = () => {
         <div style={{
             display: 'flex',
             flexWrap: "wrap",
-            padding: ".5em",
+            padding: "1em",
+            alignItems:"center",
+            justifyContent:"center",
+            maxWidth:"1300px",
+            margin:"auto"
         }}>
             <Card style={{
                 display: 'flex',
@@ -113,6 +117,7 @@ const MembersPage = () => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 width: "70%",
+                minWidth:"300px"
             }}>
                 {familyMembers.map((member, index) => (
                     <MemberCard member={member} key={index} />
