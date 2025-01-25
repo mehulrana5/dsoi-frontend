@@ -24,6 +24,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
 
     const login = async (credentials: { username: string; password: string }) => {
         setLoading("login");
+        
+        console.log(credentials, BASE_URL);
+
         try {
             // const res = await fetch(`${BASE_URL}/member/login`, {
             //     method: 'POST',
