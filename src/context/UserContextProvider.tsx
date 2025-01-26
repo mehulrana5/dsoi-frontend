@@ -9,6 +9,7 @@ interface UserContextType {
     logout: () => void;
     minPayment: (id: { id: string }) => Promise<number>;
     addAmount: (amount: { amount: number }) => void;
+    fetchOrders: (cred: { member_id: string }) => Promise<string[]>;
 }
 
 // Create the UserContext
@@ -108,8 +109,34 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             }, 1000);
         }
     };
+
+    const fetchOrders = async (cred: { member_id: string }) => {
+        setLoading("fetchOrders");
+        try {
+            // const res = await fetch(`${BASE_URL}/orders`, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(cred)
+            // });
+            // const data = await res.json();
+            // if (data.error) {
+            //     alert(data.error.message);
+            //     return "";
+            // }
+            console.log(cred);
+            return ["6774ff1d50f43663fbed1930"];
+        } catch (error) {
+            console.error('Fetch orders error:', error);
+            alert('Fetching orders failed. Please try again.');
+            return [""];
+        } finally {
+            setTimeout(() => {
+                setLoading("");
+            }, 1000);
+        }
+    };
     return (
-        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount }}>
+        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount, fetchOrders }}>
             {children}
         </UserContext.Provider>
     );

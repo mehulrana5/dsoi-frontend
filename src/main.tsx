@@ -11,6 +11,7 @@ import TransactionsPage from './pages/TransactionsPage.tsx';
 import BookDsoiPage from './pages/BookDsoiPage.tsx';
 import NotificationsPage from './pages/NotificationsPage.tsx'
 import AddGuestPage from './pages/AddGuestPage.tsx';
+import CouponsPage from './pages/CouponsPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
           <Route element={<Dashboard />}>
             <Route path='/member' element={<MembersPage />} />
             <Route path='/recharge' element={<RechargePage />} />
+            <Route path='/coupons' element={<CouponsPage />} />            
             <Route path='/transactions' element={<TransactionsPage />} />
             <Route path='/book' element={<BookDsoiPage />} />
             <Route path='/notifications' element={<NotificationsPage />} />

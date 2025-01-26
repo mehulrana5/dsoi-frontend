@@ -30,8 +30,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             isActive: false
           },
           {
-            title: "Recharge",
+            title: "Recharge Wallet",
             url: "/recharge",
+            isActive: false
+          },
+          {
+            title: "My Coupons",
+            url: "/coupons",
             isActive: false
           },
           {
