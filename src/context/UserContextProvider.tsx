@@ -35,11 +35,13 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     console.log(`BASE URL ${BASE_URL}`);
 
     useEffect(() => {
-        if (!member) {
-            getMember()
-        }
-        if (!family) {
-            getFamily()
+        if (localStorage.getItem("id")) {
+            if (!member) {
+                getMember()
+            }
+            if (!family) {
+                getFamily()
+            }
         }
     }, [])
 

@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserContext } from "@/context/UserContextProvider";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 const MembersPage = () => {
 
@@ -17,7 +17,7 @@ const MembersPage = () => {
         image: context?.member?.photo || "",
         alt: context?.member?.userName || ""
     };
-    
+
     return (
         <div style={{
             display: 'flex',

@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import QRCode from 'react-qr-code'
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 function CouponsPage() {
     const [orders, setOrders] = useState<{ _id: string, orderDate: Date; }[]>([]);
@@ -54,7 +55,9 @@ function CouponsPage() {
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
-                                            <DialogTitle>QR Code</DialogTitle>
+                                            <VisuallyHidden>
+                                                <DialogTitle>QR Code</DialogTitle>
+                                            </VisuallyHidden>
                                             <DialogDescription></DialogDescription>
                                         </DialogHeader>
                                         {selectedOrder === order._id && (
