@@ -5,11 +5,15 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://dsoi-backend.onrender
 // Define the context type
 interface UserContextType {
     loading: string;
+    member: any;
+    family: any;
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
     minPayment: (id: { id: string }) => Promise<number>;
     addAmount: (amount: { amount: number }) => void;
     fetchOrders: () => Promise<[]>;
+    getMember: () => Promise<any>;
+    getFamily: () => Promise<any>;
     BASE_URL: String;
 }
 
@@ -24,6 +28,8 @@ interface UserContextProviderProps {
 // UserContextProvider component
 const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const [loading, setLoading] = useState<string>("");
+    const [member, setMember] = useState<any>(null);
+    const [family, setFamily] = useState<any>(null);
     const navigate = useNavigate();
 
     console.log(`BASE URL ${BASE_URL}`);
@@ -154,8 +160,63 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             setLoading("");
         }
     };
+
+    const getMember = async () => {
+        setLoading("getMember");
+        try {
+            const res = await fetch(`${BASE_URL}/getMember`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
+            if (res.status === 401) {
+                logout();
+                return null;
+            }
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return null;
+            }
+            setMember(data); // Store member data
+            return data;
+        } catch (error) {
+            console.error('Get member error:', error);
+            alert('Fetching member details failed. Please try again.');
+            return null;
+        } finally {
+            setLoading("");
+        }
+    };
+
+    const getFamily = async () => {
+        setLoading("getFamily");
+        try {
+            const res = await fetch(`${BASE_URL}/getFamily`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
+            if (res.status === 401) {
+                logout();
+                return null;
+            }
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return null;
+            }
+            setFamily(data);
+            return true;
+        } catch (error) {
+            console.error('Get family error:', error);
+            alert('Fetching family details failed. Please try again.');
+            return null;
+        } finally {
+            setLoading("");
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount, fetchOrders, BASE_URL }}>
+        <UserContext.Provider value={{ loading, member, family, login, logout, minPayment, addAmount, fetchOrders, getMember, getFamily, BASE_URL }}>
             {children}
         </UserContext.Provider>
     );

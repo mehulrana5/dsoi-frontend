@@ -2,87 +2,40 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-const memberData = {
-    name: "Prakash Singh Rana",
-    contact: "9711009451",
-    rank: "AxRt35$$1",
-    wallet: "7000",
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUuFXHdGlhMEcadqT-yb5CkmmYGVI0hsB0ig&s',
-    alt: 'Prakash Singh Rana'
-};
-
-const familyMembers = [
-    {
-        name: "Mehul",
-        dateOfBirth: "20-06-2003",
-        type: "Dependent",
-        image: "https://media.istockphoto.com/id/1132797961/photo/latin-male-portrait-standing-at-work-studio.jpg?s=612x612&w=0&k=20&c=le4ixoWSjGdM6yzGwXFEGUGxNCLwnqZC5yEvFJ9Vpb0=",
-        alt: "Mehul",
-    },
-    {
-        name: "Mitul",
-        dateOfBirth: "18-01-2005",
-        type: "Dependent",
-        image: "https://media.istockphoto.com/id/1058733496/photo/headshot-of-a-teenage-boy.jpg?s=612x612&w=0&k=20&c=m3YRRtqhjYTHh3L0d1UUvDpXl0OnDDZJ83ItA5g4O5I=",
-        alt: "Mitul",
-    },
-    {
-        name: "Hema Rana",
-        dateOfBirth: "31-07-1980",
-        type: "Spouse",
-        image: "https://t3.ftcdn.net/jpg/02/37/07/78/360_F_237077800_5zPsGCgnVfSoBDJkIYrw2ktbbYIpPynL.jpg",
-        alt: "Hema",
-    },
-];
-
-interface Member {
-    name: string;
-    dateOfBirth: string;
-    type: string;
-    image: string;
-    alt: string;
-}
-
-const MemberCard = ({ member }: { member: Member }) => (
-    <Card style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '.5em',
-        minWidth:"300px"
-    }}>
-        <Avatar style={{
-            width: '200px',
-            height: '200px',
-        }}>
-            <AvatarImage src={member.image} alt="User Image" style={{ objectFit: 'cover' }} />
-            <AvatarFallback>{member.alt}</AvatarFallback>
-        </Avatar>
-        <div style={{
-            margin: "0 0 0 20px"
-        }}>
-            <Label>Name</Label>
-            <Input value={member.name} readOnly />
-            <Label>Date of Birth</Label>
-            <Input value={member.dateOfBirth} readOnly />
-            <Label>Type</Label>
-            <Input value={member.type} readOnly />
-        </div>
-    </Card>
-);
+import { UserContext } from "@/context/UserContextProvider";
+import { useContext, useEffect } from "react";
 
 const MembersPage = () => {
+
+    const context = useContext(UserContext)
+
+    const memberData = {
+        name: context?.member?.userName || "",
+        contact: context?.member?.contact || "",
+        rank: context?.member?.rank || "",
+        wallet: context?.member?.wallet || "",
+        image: context?.member?.photo || "",
+        alt: context?.member?.userName || ""
+    };
+
+    useEffect(() => {
+        if (!context?.member) {
+            context?.getMember()
+        }
+        if (!context?.family) {
+            context?.getFamily()
+        }
+    }, [])
+
     return (
         <div style={{
             display: 'flex',
             flexWrap: "wrap",
             padding: "1em",
-            alignItems:"center",
-            justifyContent:"center",
-            maxWidth:"1300px",
-            margin:"auto"
+            alignItems: "center",
+            justifyContent: "center",
+            maxWidth: "1300px",
+            margin: "auto"
         }}>
             <Card style={{
                 display: 'flex',
@@ -91,12 +44,12 @@ const MembersPage = () => {
                 alignItems: 'center',
                 justifyContent: 'space-around',
                 width: "30%",
-                minWidth:"300px"
+                minWidth: "300px"
             }}>
                 <div>
                     <Avatar style={{
-                        width:"200px",
-                        height:"200px"
+                        width: "200px",
+                        height: "200px"
                     }}>
                         <AvatarImage src={memberData.image} alt="User Image" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                         <AvatarFallback>{memberData.alt}</AvatarFallback>
@@ -117,10 +70,35 @@ const MembersPage = () => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 width: "70%",
-                minWidth:"300px"
+                minWidth: "300px"
             }}>
-                {familyMembers.map((member, index) => (
-                    <MemberCard member={member} key={index} />
+                {context?.family?.family?.map((member: any, index: number) => (
+                    <Card key={index} style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '.5em',
+                        minWidth: "300px"
+                    }}>
+                        <Avatar style={{
+                            width: '200px',
+                            height: '200px',
+                        }}>
+                            <AvatarImage src={member.photo || ""} alt="User Image" style={{ objectFit: 'cover' }} />
+                            <AvatarFallback>{member.name || ""}</AvatarFallback>
+                        </Avatar>
+                        <div style={{
+                            margin: "0 0 0 20px"
+                        }}>
+                            <Label>Name</Label>
+                            <Input value={member.name || ""} readOnly />
+                            <Label>Date of Birth</Label>
+                            <Input value={member.dob || ""} readOnly />
+                            <Label>Type</Label>
+                            <Input value={member.type || ""} readOnly />
+                        </div>
+                    </Card>
                 ))}
             </div>
         </div>
