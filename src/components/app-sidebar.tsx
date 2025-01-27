@@ -3,6 +3,7 @@ import * as React from "react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,8 +16,11 @@ import {
 import { ModeToggle } from "./mode-toggle"
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { UserContext } from "@/context/UserContextProvider"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const context=React.useContext(UserContext)
 
   const [data, setData] = useState({
     navMain: [
@@ -97,6 +101,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarContent>
+          <SidebarMenuButton onClick={()=>context?.logout()}>Logout</SidebarMenuButton>
+        </SidebarContent>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )

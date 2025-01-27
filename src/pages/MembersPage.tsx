@@ -17,16 +17,7 @@ const MembersPage = () => {
         image: context?.member?.photo || "",
         alt: context?.member?.userName || ""
     };
-
-    useEffect(() => {
-        if (!context?.member) {
-            context?.getMember()
-        }
-        if (!context?.family) {
-            context?.getFamily()
-        }
-    }, [])
-
+    
     return (
         <div style={{
             display: 'flex',
@@ -94,7 +85,7 @@ const MembersPage = () => {
                             <Label>Name</Label>
                             <Input value={member.name || ""} readOnly />
                             <Label>Date of Birth</Label>
-                            <Input value={member.dob || ""} readOnly />
+                            <Input value={member.dob ? new Date(member.dob).toLocaleDateString() : ""} readOnly />
                             <Label>Type</Label>
                             <Input value={member.type || ""} readOnly />
                         </div>

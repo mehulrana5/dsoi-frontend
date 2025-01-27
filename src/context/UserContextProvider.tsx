@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, FC } from 'react';
+import { createContext, useState, ReactNode, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://dsoi-backend.onrender.com/api';
 
@@ -33,6 +33,15 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const navigate = useNavigate();
 
     console.log(`BASE URL ${BASE_URL}`);
+
+    useEffect(() => {
+        if (!member) {
+            getMember()
+        }
+        if (!family) {
+            getFamily()
+        }
+    }, [])
 
     // Function to get global headers
     const getHeaders = () => {
