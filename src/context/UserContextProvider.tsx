@@ -9,7 +9,7 @@ interface UserContextType {
     logout: () => void;
     minPayment: (id: { id: string }) => Promise<number>;
     addAmount: (amount: { amount: number }) => void;
-    fetchOrders: (cred: { member_id: string }) => Promise<string[]>;
+    fetchOrders: () => Promise<[]>;
 }
 
 // Create the UserContext
@@ -25,25 +25,35 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const [loading, setLoading] = useState<string>("");
     const navigate = useNavigate();
 
+    // Function to get global headers
+    const getHeaders = () => {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("token") || ""
+        };
+    };
+
     const login = async (credentials: { username: string; password: string }) => {
         setLoading("login");
 
-        console.log(credentials, BASE_URL);
-
         try {
-            // const res = await fetch(`${BASE_URL}/member/login`, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ userName: credentials.username, password: credentials.password })
-            // });
-            // const data = await res.json();
-            // if (data.error) {
-            //     alert(data.error.message);
-            //     return;
-            // }
-            // localStorage.setItem("id", data.member.id);
-            // localStorage.setItem("userName", data.member.userName);
-            // localStorage.setItem("token", data.token);
+            const res = await fetch(`${BASE_URL}/member/login`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify({ userName: credentials.username, password: credentials.password })
+            });
+            if (res.status === 401) {
+                logout();
+                return;
+            }
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return;
+            }
+            localStorage.setItem("id", data.member.id);
+            localStorage.setItem("userName", data.member.userName);
+            localStorage.setItem("token", `Berear ${data.token}`);
             navigate('/member');
         } catch (error) {
             console.error('Login error:', error);
@@ -65,9 +75,13 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         try {
             // const res = await fetch(`${BASE_URL}/payment/min`, {
             //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
+            //     headers: getHeaders(),
             //     body: JSON.stringify(id)
             // });
+            // if (res.status === 401) {
+            //     logout();
+            //     return;
+            // }
             // const data = await res.json();
             // if (data.error) {
             //     alert(data.error.message);
@@ -91,7 +105,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         try {
             // const res = await fetch(`${BASE_URL}/members`, {
             //     method: 'PUT',
-            //     headers: { 'Content-Type': 'application/json' },
+            //     headers: getHeaders(),
             //     body: JSON.stringify({ wallet: amount })
             // });
             // const data = await res.json();
@@ -99,6 +113,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             //     alert(data.error.message);
             //     return;
             // }
+            // const data = await res.json();
             console.log(amount);
         } catch (error) {
             console.error('Add amount error:', error);
@@ -110,29 +125,30 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }
     };
 
-    const fetchOrders = async (cred: { member_id: string }) => {
+    const fetchOrders = async () => {
         setLoading("fetchOrders");
         try {
-            // const res = await fetch(`${BASE_URL}/orders`, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(cred)
-            // });
-            // const data = await res.json();
-            // if (data.error) {
-            //     alert(data.error.message);
-            //     return "";
-            // }
-            console.log(cred);
-            return ["6774ff1d50f43663fbed1930"];
+            const res = await fetch(`${BASE_URL}/getOrders`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify({ member_id: localStorage.getItem("id"), status: "pending" })
+            });
+            if (res.status === 401) {
+                logout();
+                return;
+            }
+            const data = await res.json();            
+            if (data.error) {
+                alert(data.error.message);
+                return [];
+            }
+            return data;
         } catch (error) {
             console.error('Fetch orders error:', error);
             alert('Fetching orders failed. Please try again.');
-            return [""];
+            return [];
         } finally {
-            setTimeout(() => {
-                setLoading("");
-            }, 1000);
+            setLoading("");
         }
     };
     return (
