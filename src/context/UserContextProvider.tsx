@@ -10,6 +10,7 @@ interface UserContextType {
     minPayment: (id: { id: string }) => Promise<number>;
     addAmount: (amount: { amount: number }) => void;
     fetchOrders: () => Promise<[]>;
+    BASE_URL: String;
 }
 
 // Create the UserContext
@@ -137,7 +138,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 logout();
                 return;
             }
-            const data = await res.json();            
+            const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
                 return [];
@@ -152,7 +153,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }
     };
     return (
-        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount, fetchOrders }}>
+        <UserContext.Provider value={{ loading, login, logout, minPayment, addAmount, fetchOrders, BASE_URL }}>
             {children}
         </UserContext.Provider>
     );
