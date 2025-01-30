@@ -88,6 +88,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         localStorage.removeItem("userName");
         localStorage.removeItem("token");
         navigate('/');
+        window.location.reload()
     };
 
     const minPayment = async (id: { id: string }) => {
@@ -188,7 +189,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 alert(data.error.message);
                 return null;
             }
-            setMember(data); // Store member data
+            setMember(data);
             return data;
         } catch (error) {
             console.error('Get member error:', error);
