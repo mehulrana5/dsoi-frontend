@@ -15,6 +15,8 @@ function CouponsPage() {
     function genQR(id: string) {
         setSelectedOrder(id);
     }
+    
+    
 
     useEffect(() => {
         context?.fetchOrders().then((res: { _id: string, orderDate: Date; }[]) => {
@@ -45,7 +47,7 @@ function CouponsPage() {
                 </TableHeader>
                 <TableBody>
                     {orders.map((order, idx) => (
-                        <TableRow key={order._id}>
+                        <TableRow key={order._id} >
                             <TableCell style={{ textAlign: 'center' }}>{idx + 1}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>
@@ -61,10 +63,16 @@ function CouponsPage() {
                                             <DialogDescription></DialogDescription>
                                         </DialogHeader>
                                         {selectedOrder === order._id && (
+                                            <div style={{ backgroundColor: "white", padding: "10px" }}>
                                             <QRCode
                                                 value={`${context?.BASE_URL}/getOrders/?orderId=${order._id}`}
-                                                style={{ height: "auto", maxWidth: "500px", width: "100%" }}
+                                                style={{
+                                                    height: "auto",
+                                                    maxWidth: "500px",
+                                                    width: "100%",
+                                                }}
                                             />
+                                        </div>
                                         )}
                                     </DialogContent>
                                 </Dialog>
