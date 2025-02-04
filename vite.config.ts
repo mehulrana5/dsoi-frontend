@@ -10,7 +10,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  define:{
-    "process.env.VITE_BASE_URL":JSON.stringify(process.env.VITE_BASE_URL)
+  define: {
+    "process.env.VITE_BASE_URL": JSON.stringify(process.env.VITE_BASE_URL),
+    "process.env.VITE_RAZORPAY_ID_KEY": JSON.stringify(process.env.VITE_RAZORPAY_ID_KEY)
   },
 })
