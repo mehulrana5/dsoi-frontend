@@ -126,17 +126,21 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const addAmount = async (amount: number) => {
         setLoading("addAmount");
         try {
-            // const res = await fetch(`${BASE_URL}/members`, {
-            //     method: 'PUT',
-            //     headers: getHeaders(),
-            //     body: JSON.stringify({ wallet: amount })
-            // });
-            // const data = await res.json();
-            // if (data.error) {
-            //     alert(data.error.message);
-            //     return;
-            // }
-            // const data = await res.json();
+            const res = await fetch(`${BASE_URL}/members`, {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify({
+                    updates: {"wallet":amount},
+                    isCronCommand: "false",
+                    action: "recharge",
+                    id: localStorage.getItem("id")
+                })
+            });
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return;
+            }
             alert(`after gate way work update member wallet and add ${amount}`)
             console.log(amount);
         } catch (error) {
