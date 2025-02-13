@@ -11,7 +11,6 @@ interface UserContextType {
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
     minPayment: (id: string) => Promise<number>;
-    addAmount: (amount: number) => void;
     fetchOrders: () => Promise<[]>;
     getMember: () => Promise<any>;
     getFamily: () => Promise<any>;
@@ -123,36 +122,6 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }
     };
 
-    const addAmount = async (amount: number) => {
-        setLoading("addAmount");
-        try {
-            const res = await fetch(`${BASE_URL}/members`, {
-                method: 'PUT',
-                headers: getHeaders(),
-                body: JSON.stringify({
-                    updates: {"wallet":amount},
-                    isCronCommand: "false",
-                    action: "recharge",
-                    id: localStorage.getItem("id")
-                })
-            });
-            const data = await res.json();
-            if (data.error) {
-                alert(data.error.message);
-                return;
-            }
-            alert(`after gate way work update member wallet and add ${amount}`)
-            console.log(amount);
-        } catch (error) {
-            console.error('Add amount error:', error);
-            alert('Adding amount failed. Please try again.');
-        } finally {
-            setTimeout(() => {
-                setLoading("");
-            }, 1000);
-        }
-    };
-
     const fetchOrders = async () => {
         setLoading("fetchOrders");
         try {
@@ -236,6 +205,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
 
     const createOrder = async (amount: number) => {
         try {
+            setLoading("addAmount")
             const newAmount = amount * 100
             const res = await fetch(`${BASE_URL}/createOrder`, {
                 method: 'POST',
@@ -270,15 +240,8 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             key: RAZORPAY_ID_KEY,
             amount: minPay,
             currency: "INR",
-            image: "https://example.com/your_logo",
             order_id: order_id,
-            handler: function (response: any) {
-                console.log(response);
-                addAmount(minPay / 100)
-            },
-            theme: {
-                color: "#3399cc",
-            },
+            theme: { color: "#3399cc", },
         };
         const rzp1 = new (window as any).Razorpay(options);
         rzp1.on("payment.failed", function (response: any) {
@@ -294,7 +257,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ loading, member, family, login, logout, minPayment, addAmount, fetchOrders, getMember, getFamily, BASE_URL, createOrder }}>
+        <UserContext.Provider value={{ loading, member, family, login, logout, minPayment, fetchOrders, getMember, getFamily, BASE_URL, createOrder }}>
             {children}
         </UserContext.Provider>
     );
