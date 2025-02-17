@@ -3,17 +3,22 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserContext } from "@/context/UserContextProvider";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const MembersPage = () => {
 
     const context = useContext(UserContext)
 
+    useEffect(() => {
+        if (context?.member === null) { context.getMember() }
+        if (context?.family === null) { context.getFamily() }
+    }, [])
+
     const memberData = {
         name: context?.member?.userName || "",
         contact: context?.member?.contact || "",
         rank: context?.member?.rank || "",
-        wallet: context?.member?.wallet || "",
+        wallet: context?.member?.wallet-4000 || "",
         image: context?.member?.photo || "",
         alt: context?.member?.userName || ""
     };

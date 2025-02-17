@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, FC, useEffect } from 'react';
+import { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://dsoi-backend.onrender.com/api';
 const RAZORPAY_ID_KEY = import.meta.env.VITE_RAZORPAY_ID_KEY;
@@ -34,17 +34,6 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const navigate = useNavigate();
 
     console.log(`BASE URL ${BASE_URL}`);
-
-    useEffect(() => {
-        if (localStorage.getItem("id")) {
-            if (!member) {
-                getMember()
-            }
-            if (!family) {
-                getFamily()
-            }
-        }
-    }, [])
 
     // Function to get global headers
     const getHeaders = () => {

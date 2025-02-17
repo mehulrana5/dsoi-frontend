@@ -27,13 +27,9 @@ function RechargePage() {
     const [minPay, setMinPay] = useState(0);
 
     useEffect(() => {
-        if (context) {
-            const id = localStorage.getItem("id") || "";
-            context.minPayment(id).then((res) => {
-                setMinPay(res);
-            });
-        }
-    }, []);
+        if (context?.member === null) { context.getMember() }
+        setMinPay(context?.member?.pendingAmount)
+    }, [context?.member]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,9 +49,7 @@ function RechargePage() {
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
         document.body.appendChild(script);
-        return () => {
-            document.body.removeChild(script);
-        };
+        return () => { document.body.removeChild(script); };
     }, []);
 
     return (
