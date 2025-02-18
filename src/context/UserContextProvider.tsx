@@ -22,9 +22,7 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Define props for UserContextProvider
-interface UserContextProviderProps {
-    children: ReactNode;
-}
+interface UserContextProviderProps { children: ReactNode; }
 
 // UserContextProvider component
 const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
@@ -52,10 +50,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 headers: getHeaders(),
                 body: JSON.stringify({ userName: credentials.username, password: credentials.password })
             });
-            if (res.status === 401) {
-                logout();
-                return;
-            }
+
+            if (res.status === 401) return logout();
+
             const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
@@ -119,10 +116,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 headers: getHeaders(),
                 body: JSON.stringify({ member_id: localStorage.getItem("id"), status: "pending" })
             });
-            if (res.status === 401) {
-                logout();
-                return;
-            }
+
+            if (res.status === 401) return logout();
+
             const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
@@ -145,10 +141,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 method: 'GET',
                 headers: getHeaders()
             });
-            if (res.status === 401) {
-                logout();
-                return null;
-            }
+
+            if (res.status === 401) return logout();
+
             const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
@@ -172,10 +167,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 method: 'GET',
                 headers: getHeaders()
             });
-            if (res.status === 401) {
-                logout();
-                return null;
-            }
+
+            if (res.status === 401) return logout();
+
             const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
@@ -202,10 +196,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 body: JSON.stringify({ amount: newAmount })
             });
 
-            if (res.status === 401) {
-                logout();
-                return null;
-            }
+            if (res.status === 401) return logout();
 
             const data = await res.json();
             handlePayment(data.id, data.amount_due)

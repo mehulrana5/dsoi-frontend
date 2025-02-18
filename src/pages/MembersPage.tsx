@@ -17,7 +17,6 @@ const MembersPage = () => {
     const memberData = {
         name: context?.member?.userName || "",
         contact: context?.member?.contact || "",
-        rank: context?.member?.rank || "",
         wallet: context?.member?.wallet-4000 || "",
         image: context?.member?.photo || "",
         alt: context?.member?.userName || ""
@@ -55,8 +54,6 @@ const MembersPage = () => {
                         <Input value={memberData.name} readOnly />
                         <Label>Contact</Label>
                         <Input value={memberData.contact} readOnly />
-                        <Label>Rank</Label>
-                        <Input value={memberData.rank} readOnly />
                         <Label>Wallet</Label>
                         <Input value={memberData.wallet} readOnly />
                     </div>
