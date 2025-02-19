@@ -53,16 +53,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/notifications",
             isActive: false
           },
-          {
-            title: "Add Guests",
-            url: "/addGuests",
-            isActive: false
-          },
-          {
-            title: "Book DSOI",
-            url: "/book",
-            isActive: false
-          },
+          // {
+          //   title: "Add Guests",
+          //   url: "/addGuests",
+          //   isActive: false
+          // },
+          // {
+          //   title: "Book DSOI",
+          //   url: "/book",
+          //   isActive: false
+          // },
         ],
       }
     ],
