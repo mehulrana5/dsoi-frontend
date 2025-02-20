@@ -37,7 +37,8 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     const getHeaders = () => {
         return {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem("token") || ""
+            'Authorization': localStorage.getItem("token") || "",
+            'id': localStorage.getItem("id") || ""
         };
     };
 
@@ -48,19 +49,35 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             const res = await fetch(`${BASE_URL}/member/login`, {
                 method: 'POST',
                 headers: getHeaders(),
-                body: JSON.stringify({ userName: credentials.username, password: credentials.password })
+                body: JSON.stringify({
+                    userName: credentials.username,
+                    password: credentials.password,
+                    deviceId: localStorage.getItem("deviceId")
+                })
             });
 
             if (res.status === 401) return logout();
 
             const data = await res.json();
             if (data.error) {
-                alert(data.error.message);
+                if (data.error.status === 403) {
+                    localStorage.setItem("id", data.error.data.id)
+                    const a = window.confirm("Account logged in from another device do you want to logout from all the devices ?")
+                    if (a) {
+                        logout();
+                        window.location.reload();
+                        alert("Login again");
+                    }
+                }
+                else {
+                    alert(data.error.message);
+                }
                 return;
             }
             localStorage.setItem("id", data.member.id);
             localStorage.setItem("userName", data.member.userName);
             localStorage.setItem("token", `Berear ${data.token}`);
+            localStorage.setItem("deviceId", data.deviceId);
             navigate('/member');
         } catch (error) {
             console.error('Login error:', error);
@@ -70,12 +87,16 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }
     };
 
-    const logout = () => {
+    const logout = async () => {
+        await fetch(`${BASE_URL}/member/logout`, {
+            method: 'POST',
+            headers: getHeaders()
+        });
         localStorage.removeItem("id");
+        localStorage.removeItem("deviceId");
         localStorage.removeItem("userName");
         localStorage.removeItem("token");
         navigate('/');
-        window.location.reload()
     };
 
     const minPayment = async (id: string) => {

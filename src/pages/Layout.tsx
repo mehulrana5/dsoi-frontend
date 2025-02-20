@@ -8,11 +8,6 @@ import { Toaster } from "@/components/ui/sonner"
 import { Outlet } from "react-router-dom"
 
 export default function Page() {
-  const userAgent = navigator.userAgent.toLowerCase()
-  alert(`
-    Includes chrome:${userAgent.includes("chrome")}
-    Is desktop:${userAgent.includes("windows") || userAgent.includes("linux")}    
-    `);
   return (
     <SidebarProvider>
       <AppSidebar />
