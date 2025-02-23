@@ -7,22 +7,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 function CouponsPage() {
-    const [orders, setOrders] = useState<{ _id: string, orderDate: Date; }[]>([]);
-    const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
-
     const context = useContext(UserContext)
+    const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
     function genQR(id: string) {
         setSelectedOrder(id);
     }
-    
-    
 
     useEffect(() => {
-        context?.fetchOrders().then((res: { _id: string, orderDate: Date; }[]) => {
-            const sortedOrders = res.sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
-            setOrders(sortedOrders);
-        })
+        context?.getOrders();
     }, []);
 
     return (
@@ -40,15 +33,17 @@ function CouponsPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead style={{ textAlign: 'center' }}>S no.</TableHead>
-                        <TableHead style={{ textAlign: 'center' }}>Order Date</TableHead>
-                        <TableHead style={{ textAlign: 'center' }}>QR Code</TableHead>
+                        <TableHead style={{ textAlign: 'center' }}>Sno.</TableHead>
+                        <TableHead style={{ textAlign: 'center' }}>Name</TableHead>
+                        <TableHead style={{ textAlign: 'center' }}>Date</TableHead>
+                        <TableHead style={{ textAlign: 'center' }}>QR</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {orders.map((order, idx) => (
+                    {context?.ordersData.data.map((order, idx) => (
                         <TableRow key={order._id} >
                             <TableCell style={{ textAlign: 'center' }}>{idx + 1}</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>{order.itemInfo.split("|")[0]}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>
                                 <Dialog>
@@ -64,15 +59,11 @@ function CouponsPage() {
                                         </DialogHeader>
                                         {selectedOrder === order._id && (
                                             <div style={{ backgroundColor: "white", padding: "10px" }}>
-                                            <QRCode
-                                                value={`${context?.BASE_URL}/getOrders/?orderId=${order._id}`}
-                                                style={{
-                                                    height: "auto",
-                                                    maxWidth: "500px",
-                                                    width: "100%",
-                                                }}
-                                            />
-                                        </div>
+                                                <QRCode
+                                                    value={`${context?.BASE_URL}/getOrders/?orderId=${order._id}`}
+                                                    style={{ height: "auto", maxWidth: "500px", width: "100%", }}
+                                                />
+                                            </div>
                                         )}
                                     </DialogContent>
                                 </Dialog>

@@ -8,13 +8,25 @@ interface UserContextType {
     loading: string;
     member: any;
     family: any;
+    BASE_URL: String;
+    ordersData: {
+        status: number,
+        data: {
+            _id: string,
+            member_id: string,
+            item_id: string,
+            itemInfo: string,
+            status: string,
+            orderDate: string
+        }[],
+        count: number
+    };
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
     minPayment: (id: string) => Promise<number>;
-    fetchOrders: () => Promise<[]>;
+    getOrders: () => Promise<void>;
     getMember: () => Promise<any>;
     getFamily: () => Promise<any>;
-    BASE_URL: String;
     createOrder: (amount: number) => Promise<any>;
 }
 
@@ -26,10 +38,24 @@ interface UserContextProviderProps { children: ReactNode; }
 
 // UserContextProvider component
 const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState<string>("");
     const [member, setMember] = useState<any>(null);
     const [family, setFamily] = useState<any>(null);
-    const navigate = useNavigate();
+
+    const [ordersData, setOrdersData] = useState<{
+        status: number,
+        data: {
+            _id: string,
+            member_id: string,
+            item_id: string,
+            itemInfo: string,
+            status: string,
+            orderDate: string
+        }[],
+        count: number
+    }>({ status: 0, data: [], count: 0 });
 
     console.log(`BASE URL ${BASE_URL}`);
 
@@ -129,13 +155,13 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }
     };
 
-    const fetchOrders = async () => {
+    const getOrders = async () => {
         setLoading("fetchOrders");
         try {
             const res = await fetch(`${BASE_URL}/getOrders`, {
                 method: 'POST',
                 headers: getHeaders(),
-                body: JSON.stringify({ member_id: localStorage.getItem("id"), status: "pending" })
+                body: JSON.stringify({ type: "mpo", query: localStorage.getItem("id"), skip: "", limit: "" })
             });
 
             if (res.status === 401) return logout();
@@ -145,6 +171,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 alert(data.error.message);
                 return [];
             }
+            setOrdersData(data)
             return data;
         } catch (error) {
             console.error('Fetch orders error:', error);
@@ -258,7 +285,20 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ loading, member, family, login, logout, minPayment, fetchOrders, getMember, getFamily, BASE_URL, createOrder }}>
+        <UserContext.Provider value={{
+            loading,
+            member,
+            family,
+            BASE_URL,
+            ordersData,
+            login,
+            logout,
+            minPayment,
+            getOrders,
+            getMember,
+            getFamily,
+            createOrder
+        }}>
             {children}
         </UserContext.Provider>
     );
