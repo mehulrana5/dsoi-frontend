@@ -17,7 +17,7 @@ const MembersPage = () => {
     const memberData = {
         name: context?.member?.userName || "",
         contact: context?.member?.contact || "",
-        wallet: context?.member?.wallet-4000 || "",
+        wallet: context?.member?.wallet || "",
         image: context?.member?.photo || "",
         alt: context?.member?.userName || ""
     };

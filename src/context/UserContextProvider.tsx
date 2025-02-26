@@ -100,10 +100,10 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 }
                 return;
             }
-            localStorage.setItem("id", data.member.id);
-            localStorage.setItem("userName", data.member.userName);
-            localStorage.setItem("token", `Bearer ${data.token}`);
-            localStorage.setItem("deviceId", data.deviceId);
+            localStorage.setItem("id", data.data.member.id);
+            localStorage.setItem("userName", data.data.member.userName);
+            localStorage.setItem("token", `Bearer ${data.data.token}`);
+            localStorage.setItem("deviceId", data.data.deviceId);
             navigate('/member');
         } catch (error) {
             console.error('Login error:', error);
@@ -197,7 +197,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
                 alert(data.error.message);
                 return null;
             }
-            setMember(data);
+            setMember(data.member);
             return data;
         } catch (error) {
             console.error('Get member error:', error);
