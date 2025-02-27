@@ -21,6 +21,18 @@ interface UserContextType {
         }[],
         count: number
     };
+    logsData: {
+        status: number,
+        data: {
+            _id: string,
+            initiatorId: string,
+            targetId: string,
+            targetModel: string,
+            action: string,
+            timeStamp: string
+        }[],
+        count: number
+    }
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
     minPayment: (id: string) => Promise<number>;
@@ -28,6 +40,7 @@ interface UserContextType {
     getMember: () => Promise<any>;
     getFamily: () => Promise<any>;
     createOrder: (amount: number) => Promise<any>;
+    getLogs: (query: string, type: string, skip: string, limit: string) => Promise<any>;
 }
 
 // Create the UserContext
@@ -56,6 +69,20 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         }[],
         count: number
     }>({ status: 0, data: [], count: 0 });
+
+    const [logsData, setLogsData] = useState<{
+        status: number,
+        data: {
+            _id: string,
+            initiatorId: string,
+            targetId: string,
+            targetModel: string,
+            action: string,
+            timeStamp: string
+        }[],
+        count: number
+    }>({ status: 0, data: [], count: 0 });
+
 
     console.log(`BASE URL ${BASE_URL}`);
 
@@ -269,20 +296,62 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             amount: minPay,
             currency: "INR",
             order_id: order_id,
-            theme: { color: "#3399cc", },
+            theme: { color: "#3399cc" },
+            handler: function () {
+                if (BASE_URL === "http://localhost:3000/api") {
+                    const headers = {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token") || ""
+                    }
+                    fetch(`${BASE_URL}/members`, {
+                        method: "PUT",
+                        headers: headers,
+                        body: JSON.stringify({
+                            action: "recharge",
+                            updates: JSON.stringify({ wallet: minPay / 100 }),
+                            id: member._id
+                        }),
+                    })
+                        .then((res) => res.json())
+                        .then((data) => console.log("Webhook simulated:", data))
+                        .catch((err) => console.error("Webhook error:", err));
+                }
+            },
         };
+
         const rzp1 = new (window as any).Razorpay(options);
         rzp1.on("payment.failed", function (response: any) {
-            alert(response.error.code);
             alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
         });
         rzp1.open();
-    }
+    };
+
+    const getLogs = async (query: string, type: string, skip: string, limit: string) => {
+        setLoading("fetchLogs");
+        try {
+            const res = await fetch(`${BASE_URL}/logs`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify({ query, type, skip, limit })
+            });
+
+            if (res.status === 401) return logout();
+
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error.message);
+                return [];
+            }
+            setLogsData(data)
+            return data;
+        } catch (error) {
+            console.error('Fetch logs error:', error);
+            alert('Fetching logs failed. Please try again.');
+            return [];
+        } finally {
+            setLoading("");
+        }
+    };
 
     return (
         <UserContext.Provider value={{
@@ -291,13 +360,15 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             family,
             BASE_URL,
             ordersData,
+            logsData,
             login,
             logout,
             minPayment,
             getOrders,
             getMember,
             getFamily,
-            createOrder
+            createOrder,
+            getLogs
         }}>
             {children}
         </UserContext.Provider>
