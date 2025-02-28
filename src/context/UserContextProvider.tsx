@@ -21,17 +21,15 @@ interface UserContextType {
         }[],
         count: number
     };
-    logsData: {
+    transactionData: {
         status: number,
         data: {
-            _id: string,
-            initiatorId: string,
-            targetId: string,
-            targetModel: string,
             action: string,
+            amount: number,
             timeStamp: string
         }[],
-        count: number
+        count: number,
+        message: string
     }
     login: (credentials: { username: string; password: string }) => Promise<void>;
     logout: () => void;
@@ -40,7 +38,7 @@ interface UserContextType {
     getMember: () => Promise<any>;
     getFamily: () => Promise<any>;
     createOrder: (amount: number) => Promise<any>;
-    getLogs: (query: string, type: string, skip: string, limit: string) => Promise<any>;
+    getTransactions: (id: string, skip: string, limit: string) => Promise<any>;
 }
 
 // Create the UserContext
@@ -70,19 +68,16 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         count: number
     }>({ status: 0, data: [], count: 0 });
 
-    const [logsData, setLogsData] = useState<{
+    const [transactionData, setTransactionData] = useState<{
         status: number,
         data: {
-            _id: string,
-            initiatorId: string,
-            targetId: string,
-            targetModel: string,
             action: string,
+            amount: number,
             timeStamp: string
         }[],
-        count: number
-    }>({ status: 0, data: [], count: 0 });
-
+        count: number,
+        message: string
+    }>({ status: 0, data: [], count: 0, message: "" });
 
     console.log(`BASE URL ${BASE_URL}`);
 
@@ -326,23 +321,21 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         rzp1.open();
     };
 
-    const getLogs = async (query: string, type: string, skip: string, limit: string) => {
+    const getTransactions = async (id: string, skip: string, limit: string) => {
         setLoading("fetchLogs");
         try {
-            const res = await fetch(`${BASE_URL}/logs`, {
+            const res = await fetch(`${BASE_URL}/getTransactions`, {
                 method: 'POST',
                 headers: getHeaders(),
-                body: JSON.stringify({ query, type, skip, limit })
+                body: JSON.stringify({ id, skip, limit })
             });
-
             if (res.status === 401) return logout();
-
             const data = await res.json();
             if (data.error) {
                 alert(data.error.message);
                 return [];
             }
-            setLogsData(data)
+            setTransactionData(data)
             return data;
         } catch (error) {
             console.error('Fetch logs error:', error);
@@ -360,7 +353,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             family,
             BASE_URL,
             ordersData,
-            logsData,
+            transactionData,
             login,
             logout,
             minPayment,
@@ -368,7 +361,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             getMember,
             getFamily,
             createOrder,
-            getLogs
+            getTransactions
         }}>
             {children}
         </UserContext.Provider>

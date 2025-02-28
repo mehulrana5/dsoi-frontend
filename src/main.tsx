@@ -7,7 +7,7 @@ import LoginForm from './pages/LoginPage.tsx';
 import Dashboard from './pages/Layout.tsx';
 import MembersPage from './pages/MembersPage.tsx'
 import RechargePage from './pages/RechargePage.tsx';
-import TransactionsPage from './pages/TransactionsPage.tsx';
+import TransactionsPage from './pages/TransactionPage/TransactionsPage.tsx';
 import BookDsoiPage from './pages/BookDsoiPage.tsx';
 import NotificationsPage from './pages/NotificationsPage.tsx'
 import AddGuestPage from './pages/AddGuestPage.tsx';
