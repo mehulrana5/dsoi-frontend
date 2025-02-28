@@ -55,7 +55,7 @@ const MembersPage = () => {
                         <Label>Contact</Label>
                         <Input value={memberData.contact} readOnly />
                         <Label>Wallet</Label>
-                        <Input value={memberData.wallet} readOnly />
+                        <Input value={Number(memberData.wallet || 0).toFixed(2)} readOnly />
                     </div>
                 </div>
             </Card>
