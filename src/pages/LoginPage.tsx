@@ -31,13 +31,11 @@ export default function Page() {
       }}
     >
       <div>
-        {!isMobile ? (
-          <p>Please open this site on a phone.</p>
-        ) : isSamsungBrowser ? (
-          <p>Please use Google Chrome, Brave, or Edge web browsers.</p>
-        ) : (
+        {!isMobile
+          ? <p>Please open this site on a phone.</p>
+          :
           <LoginForm />
-        )}
+        }
         {/* <LoginForm /> */}
       </div>
     </div>

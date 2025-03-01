@@ -6,7 +6,7 @@ import UserContextProvider from './context/UserContextProvider.tsx';
 import LoginForm from './pages/LoginPage.tsx';
 import Dashboard from './pages/Layout.tsx';
 import MembersPage from './pages/MembersPage.tsx'
-import RechargePage from './pages/RechargePage.tsx';
+import RechargePage from './pages/RechargePage/RechargePage.tsx';
 import TransactionsPage from './pages/TransactionPage/TransactionsPage.tsx';
 import BookDsoiPage from './pages/BookDsoiPage.tsx';
 import NotificationsPage from './pages/NotificationsPage.tsx'

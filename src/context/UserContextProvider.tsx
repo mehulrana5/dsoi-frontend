@@ -2,13 +2,15 @@ import { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://dsoi-backend.onrender.com/api';
 const RAZORPAY_ID_KEY = import.meta.env.VITE_RAZORPAY_ID_KEY;
+const GATEWAY_FEE = import.meta.env.VITE_GATEWAY_FEE;
 
 // Define the context type
 interface UserContextType {
     loading: string;
     member: any;
     family: any;
-    BASE_URL: String;
+    BASE_URL: string;
+    GATEWAY_FEE: number
     ordersData: {
         status: number,
         data: {
@@ -78,8 +80,6 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
         count: number,
         message: string
     }>({ status: 0, data: [], count: 0, message: "" });
-
-    console.log(`BASE URL ${BASE_URL}`);
 
     // Function to get global headers
     const getHeaders = () => {
@@ -352,6 +352,7 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
             member,
             family,
             BASE_URL,
+            GATEWAY_FEE,
             ordersData,
             transactionData,
             login,

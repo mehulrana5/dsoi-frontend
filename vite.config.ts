@@ -12,6 +12,7 @@ export default defineConfig({
   },
   define: {
     "process.env.VITE_BASE_URL": JSON.stringify(process.env.VITE_BASE_URL),
-    "process.env.VITE_RAZORPAY_ID_KEY": JSON.stringify(process.env.VITE_RAZORPAY_ID_KEY)
+    "process.env.VITE_GATEWAY_FEE": JSON.stringify(process.env.VITE_GATEWAY_FEE),
+    "process.env.VITE_RAZORPAY_ID_KEY": JSON.stringify(process.env.VITE_RAZORPAY_ID_KEY),
   },
 })
