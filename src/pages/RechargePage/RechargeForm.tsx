@@ -27,15 +27,6 @@ function RechargeForm() {
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
         document.body.appendChild(script);
-
-        return () => {
-            if (document.body.contains(script)) {
-                document.body.removeChild(script);
-            }
-        };
-    }, []);
-
-    useEffect(() => {
         const fetchMemberData = async () => {
             if (!context?.member?.pendingAmount) {
                 try {
@@ -51,9 +42,13 @@ function RechargeForm() {
                 setPending(context.member.pendingAmount);
             }
         };
-
         fetchMemberData();
-    }, [context]);
+        return () => {
+            if (document.body.contains(script)) {   
+                document.body.removeChild(script);
+            }
+        };
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
