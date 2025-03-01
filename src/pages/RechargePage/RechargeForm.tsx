@@ -53,7 +53,7 @@ function RechargeForm() {
         };
 
         fetchMemberData();
-    }, [context]);
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

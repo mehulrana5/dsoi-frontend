@@ -18,7 +18,11 @@ import { Link } from "react-router-dom"
 import { useState } from "react"
 import { UserContext } from "@/context/UserContextProvider"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  closeSidebar: () => void;
+}
+
+export function AppSidebar({ closeSidebar, ...props }: AppSidebarProps) {
 
   const context=React.useContext(UserContext)
 
@@ -75,6 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         e.isActive = false;
       });
       newData.navMain[0].items[idx].isActive = true;
+      closeSidebar();
       return newData;
     });
   }
