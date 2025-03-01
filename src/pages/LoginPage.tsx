@@ -5,18 +5,12 @@ import { LoginForm } from "@/components/login-form";
 
 export default function Page() {
   const [isMobile, setIsMobile] = useState(false);
-  const [isSamsungBrowser, setIsSamsungBrowser] = useState(false);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ua = navigator.userAgent.toLowerCase();
 
       // Detect if the user is on a mobile device
       setIsMobile(/iphone|ipod|android|blackberry|windows phone|mobile/i.test(ua));
-
-      // Detect Samsung Internet Browser
-      setIsSamsungBrowser(ua.includes("samsung"));
-
     }
   }, []);
 
